@@ -2,26 +2,50 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+@layer base {
+    :root {
+        --color-primary: #a21caf;
+        --color-secondary: #14b8a6;
+        --bg-light: #fffbfb;
+        --bg-dark: #1a1717;
+    }
+
+    .input-primary {
+        @apply w-full bg-white/50 dark:bg-black/50 rounded-md ring-1 border border-black/10 dark:border-white/20 text-sm py-2 px-3 outline-none focus:ring-[var(--color-primary)];
+    }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+:root {
+    --color-primary: #a21caf;
+    --color-secondary: #14b8a6;
+    --bg-light: #fffbfb;
+    --bg-dark: #1a1717;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+    overflow-x: hidden;
+}
+
+/* For WebKit Browsers */
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* For Firefox */
+::-moz-scrollbar {
+    display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: var(--bg-dark);
+    }
+}
+
+.ellipsis {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
 }
