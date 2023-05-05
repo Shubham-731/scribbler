@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import { useTheme } from "@/providers/ThemeProvider"
+import { useAuth } from "@/providers/AuthProvider"
 
 const Menu = ({
     closeSidebarHandler,
@@ -11,6 +12,7 @@ const Menu = ({
     closeSidebarHandler?: () => void
 }) => {
     const router = useRouter()
+    const { user, logout } = useAuth()
 
     const tabs: { title: string; href: string; border?: boolean }[] = [
         {
@@ -32,11 +34,6 @@ const Menu = ({
         {
             title: "my posts",
             href: "/posts",
-        },
-        {
-            title: "login",
-            href: "/auth/login",
-            border: true,
         },
     ]
 
@@ -62,6 +59,28 @@ const Menu = ({
                     </Link>
                 </li>
             ))}
+
+            <li
+                className={`text-2xl capitalize md:text-lg font-medium transition-all hover:text-[var(--color-primary)] dark:hover:text-[var(--color-primary)] text-[var(--color-primary)] dark:text-[var(--color-primary)]`}
+                onClick={closeSidebarHandler}
+            >
+                {user ? (
+                    <button
+                        className={`capitalize border border-solid border-[var(--color-primary)] rounded-md py-2 md:py-1 px-4 hover:bg-[var(--color-primary)] dark:hover:text-white/80 hover:text-white/80`}
+                        onClick={logout}
+                    >
+                        logout
+                    </button>
+                ) : (
+                    <Link href={"/auth/login"}>
+                        <button
+                            className={`capitalize border border-solid border-[var(--color-primary)] rounded-md py-2 md:py-1 px-4 hover:bg-[var(--color-primary)] dark:hover:text-white/80 hover:text-white/80`}
+                        >
+                            login
+                        </button>
+                    </Link>
+                )}
+            </li>
         </ul>
     )
 }

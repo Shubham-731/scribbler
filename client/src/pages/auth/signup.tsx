@@ -1,13 +1,39 @@
 import Heading from "@/components/Heading"
 import Image from "next/image"
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useFormik } from "formik"
+import { useAuth } from "@/providers/AuthProvider"
+import { useRouter } from "next/router"
 
 const SignUp = () => {
     // Handle show password
     const [showPassword, setShowPassword] = useState<boolean>(false)
     const toggleShowPassword = () => setShowPassword(!showPassword)
-    console.log(showPassword)
+
+    // Register function
+    const { register, user } = useAuth()
+    const router = useRouter()
+
+    // Get formdata using formik
+    const initialValues: UserType = {
+        fullName: "",
+        email: "",
+        password: "",
+    }
+    const formik = useFormik({
+        initialValues,
+        onSubmit: async (values, { setSubmitting }) => {
+            await register(values)
+            setSubmitting(false)
+        },
+    })
+
+    useEffect(() => {
+        if (user) {
+            router.push("/")
+        }
+    }, [user])
 
     return (
         <section>
@@ -17,22 +43,37 @@ const SignUp = () => {
             />
 
             {/* Login form */}
-            <form className="space-y-3 my-10 max-w-md w-full mx-auto relative">
+            <form
+                className="space-y-3 my-10 max-w-md w-full mx-auto relative"
+                onSubmit={formik.handleSubmit}
+            >
                 <input
                     type="text"
                     placeholder="Full Name"
                     className="input-primary"
+                    value={formik.values.fullName}
+                    onChange={formik.handleChange}
+                    name="fullName"
+                    autoComplete="off"
                 />
                 <input
-                    type="text"
+                    type="email"
                     placeholder="Email Address"
                     className="input-primary"
+                    value={formik.values.email}
+                    onChange={formik.handleChange}
+                    name="email"
+                    autoComplete="off"
                 />
                 <div className="w-full relative">
                     <input
                         type={showPassword ? "text" : "password"}
                         placeholder="Password"
                         className="input-primary"
+                        value={formik.values.password}
+                        onChange={formik.handleChange}
+                        name="password"
+                        autoComplete="off"
                     />
 
                     <div className="absolute top-0.5 right-2">
@@ -62,7 +103,7 @@ const SignUp = () => {
 
                 <button>
                     <Link
-                        href="#"
+                        href="/auth/login"
                         className="text-sm hover:underline text-[var(--color-secondary)]"
                     >
                         Already have an account?
@@ -70,7 +111,11 @@ const SignUp = () => {
                 </button>
 
                 <button
-                    className={`md:w-fit w-full float-right bg-[var(--color-primary)] text-white py-2 px-5 font-semibold md:text-lg rounded-lg`}
+                    className={`md:w-fit w-full float-right bg-[var(--color-primary)] text-white py-2 px-5 font-semibold rounded-lg ${
+                        formik.isSubmitting &&
+                        !formik.isValidating &&
+                        "pointer-events-none opacity-75"
+                    }`}
                     type="submit"
                 >
                     Sign up &rarr;

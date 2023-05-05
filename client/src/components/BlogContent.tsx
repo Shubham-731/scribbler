@@ -4,7 +4,6 @@ import hljs from "highlight.js"
 
 const BlogContent = () => {
     useEffect(() => {
-        // Prism.highlightAll()
         hljs.highlightAll()
     })
 

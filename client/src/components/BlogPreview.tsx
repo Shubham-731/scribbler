@@ -1,6 +1,9 @@
 import Link from "next/link"
+import { useAuth } from "@/providers/AuthProvider"
 
-const BlogPreview = () => {
+const BlogPreview = ({ editable }: { editable: boolean }) => {
+    const { user } = useAuth()
+
     return (
         <div className="flex flex-col md:flex-row gap-2 py-4 px-1">
             <div className="min-w-[12rem] md:space-y-1">
@@ -40,21 +43,47 @@ const BlogPreview = () => {
                         </button>
                     </Link>
                 </div>
-                <p className="text-sm text-black/60 dark:text-white/60 md:text-base md:leading-5 leading-4 ellipsis">
+                <p className="text-sm text-black/60 dark:text-white/60 md:text-[0.95rem] md:leading-[1.15rem] leading-4 ellipsis">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
                     Explicabo a neque nemo consectetur eaque commodi quos sit
                     vero, praesentium ea qui quia molestias. Veniam ipsum
                     dolores delectus quas, sint rem! Magnam, ad?
                 </p>
 
-                <button style={{ marginTop: "1rem" }}>
-                    <Link
-                        href={"/blogs/new-feature-in-v1"}
-                        className="text-[var(--color-primary)] hover:tracking-wide border border-solid border-[var(--color-primary)] rounded-md py-1 px-3 transition-all duration-200 ease-linear text-sm md:text-base"
-                    >
-                        Read more &rarr;
-                    </Link>
-                </button>
+                <div
+                    className="flex items-center gap-2 md:gap-3"
+                    style={{ marginTop: "1rem" }}
+                >
+                    {user && editable ? (
+                        <>
+                            <button>
+                                <Link
+                                    href={"/blogs/new-feature-in-v1"}
+                                    className="text-[var(--color-secondary)] hover:tracking-wide border border-solid border-[var(--color-secondary)] rounded-md py-1 px-3 transition-all duration-200 ease-linear text-sm md:text-base"
+                                >
+                                    Edit &rarr;
+                                </Link>
+                            </button>
+                            <button>
+                                <Link
+                                    href={"/blogs/new-feature-in-v1"}
+                                    className="text-[var(--color-secondary)] hover:tracking-wide border border-solid border-[var(--color-secondary)] rounded-md py-1 px-3 transition-all duration-200 ease-linear text-sm md:text-base"
+                                >
+                                    Delete &rarr;
+                                </Link>
+                            </button>
+                        </>
+                    ) : (
+                        <button>
+                            <Link
+                                href={"/blogs/new-feature-in-v1"}
+                                className="text-[var(--color-primary)] hover:tracking-wide border border-solid border-[var(--color-primary)] rounded-md py-1 px-3 transition-all duration-200 ease-linear text-sm md:text-base"
+                            >
+                                Read more &rarr;
+                            </Link>
+                        </button>
+                    )}
+                </div>
             </div>
         </div>
     )
