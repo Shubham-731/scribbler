@@ -3,3 +3,6 @@ node_modules
 
 # Production builds
 dist
+
+# env
+.env
