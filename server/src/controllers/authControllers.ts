@@ -1,4 +1,4 @@
-import { Request, Response, Send } from "express"
+import { Request, Response } from "express"
 import User from "../models/User"
 import bcrypt from "bcryptjs"
 import { generateToken } from "../utils/jwt"
@@ -8,8 +8,7 @@ import {
     UserDocument,
     SendUserType,
 } from "../types/UserTypes"
-import { JWT_SECRET, NODE_ENV } from "../config/env"
-import jwt, { JwtPayload } from "jsonwebtoken"
+import { NODE_ENV } from "../config/env"
 
 interface AuthenticatedResponse {
     msg: string | false
@@ -144,39 +143,13 @@ const getUser = async (
     res: Response<AuthenticatedResponse>
 ): Promise<void> => {
     try {
-        // Get auth token
-        const authToken: string = req.cookies["auth-token"]
-
-        // Check if authToken is present and valid
-        if (authToken) {
-            const decodedToken: SendUserType | string | JwtPayload = jwt.verify(
-                authToken,
-                JWT_SECRET
-            )
-
-            if (typeof decodedToken !== "string") {
-                const user =
-                    decodedToken &&
-                    (await User.findOne({ email: decodedToken.email }))
-                if (!user) {
-                    res.status(404).json({
-                        msg: "User not found!",
-                    })
-                    return
-                }
-
-                // Send success response
-                res.status(200).json({
-                    msg: "User found!",
-                    user: user && sendUser(user),
-                })
-            }
-        } else {
-            // Send an `unauthorized` error
-            res.status(401).json({
-                msg: "Unauthorized access!",
+        if (req.currentUser) {
+            res.status(200).json({
+                msg: "User found",
+                user: sendUser(req.currentUser),
             })
-            return
+        } else {
+            res.status(401).json({ msg: "User unauthorized!" })
         }
     } catch (error) {
         const errorMsg = error instanceof Error && error.message
