@@ -5,6 +5,7 @@ import {
     logoutUser,
     registerUser,
 } from "../controllers/authControllers"
+import checkUser from "../middlewares/authMiddleware"
 
 const router: Router = express.Router()
 
@@ -21,6 +22,6 @@ router.post("/login", loginUser)
 router.get("/logout", logoutUser)
 
 // @route - /api/auth/user
-router.get("/user", getUser)
+router.get("/user", checkUser, getUser)
 
 export default router
