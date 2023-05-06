@@ -5,8 +5,6 @@ import {
     logoutUser,
     registerUser,
 } from "../controllers/authControllers"
-import { checkUser } from "../middlewares/authMiddleware"
-import { RequestHandler } from "express"
 
 const router: Router = express.Router()
 
