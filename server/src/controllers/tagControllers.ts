@@ -2,6 +2,11 @@ import { Request, Response } from "express"
 import Post from "../models/Post"
 import { PostDocumentType } from "../types/PostTypes"
 
+interface Tags {
+    count: number
+    tag: string
+}
+
 const getBlogsByTag = async (req: Request, res: Response): Promise<void> => {
     try {
         // Pagination props
@@ -45,7 +50,11 @@ const getBlogsByTag = async (req: Request, res: Response): Promise<void> => {
 
 const getTags = async (req: Request, res: Response): Promise<void> => {
     try {
-        const tags = await Post.distinct("tags")
+        const tags: Tags[] = await Post.aggregate([
+            { $unwind: "$tags" }, // break down the array into separate documents
+            { $group: { _id: "$tags", count: { $sum: 1 } } }, // group by tag and count occurrences
+            { $project: { _id: 0, tag: "$_id", count: 1 } }, // format the output
+        ])
         res.json({ msg: "Tags found!", tags })
     } catch (error) {
         console.log(error)
