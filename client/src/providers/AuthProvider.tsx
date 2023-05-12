@@ -28,7 +28,6 @@ const AuthContext = createContext<AuthContextType>({
 // Auth Provider
 function AuthProvider({ children }: { children: JSX.Element }) {
     const [user, setUser] = useState<null | AuthenticatedUserType>(null)
-    console.log(user)
 
     // Get user
     useEffect(() => {
@@ -56,7 +55,7 @@ function AuthProvider({ children }: { children: JSX.Element }) {
         }
 
         if (!user) {
-            getUser(`http://localhost:5000/api/auth/user`)
+            getUser(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/auth/user`)
         }
     }, [user])
 
@@ -70,7 +69,7 @@ function AuthProvider({ children }: { children: JSX.Element }) {
             }
 
             //Make request
-            const loginApiUrl = `http://localhost:5000/api/auth/login`
+            const loginApiUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/auth/login`
             const res: AxiosResponse<{ user: AuthenticatedUserType }> =
                 await axios.post(
                     loginApiUrl,
@@ -118,7 +117,7 @@ function AuthProvider({ children }: { children: JSX.Element }) {
             }
 
             //Make request
-            const registerApiUrl = `http://localhost:5000/api/auth/register`
+            const registerApiUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/auth/register`
             const res: AxiosResponse<{ user: AuthenticatedUserType }> =
                 await axios.post(
                     registerApiUrl,
@@ -161,7 +160,7 @@ function AuthProvider({ children }: { children: JSX.Element }) {
     const logout = async () => {
         try {
             //Make request
-            const logoutApiUrl = `http://localhost:5000/api/auth/logout`
+            const logoutApiUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/auth/logout`
             const res: AxiosResponse<{ msg: string }> = await axios.get(
                 logoutApiUrl,
                 {

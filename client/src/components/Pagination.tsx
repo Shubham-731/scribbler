@@ -1,13 +1,38 @@
-const Pagination = () => {
+import Link from "next/link"
+
+interface ComponentProps {
+    totalPages: number
+    currentPage: number
+    pathname: string
+}
+
+const Pagination = ({ totalPages, currentPage, pathname }: ComponentProps) => {
     return (
         <section className="flex items-center justify-between flex-wrap">
-            <button className="text-sm md:text-base opacity-75 cursor-not-allowed text-[var(--color-primary)] hover:scale-105 border border-solid border-[var(--color-primary)] rounded-md py-1 px-2 md:px-3 transition-all duration-200 ease-linear">
-                &larr; Previous
-            </button>
-            <p className="flex-grow w-fit text-center">1 of 2</p>
-            <button className="text-sm md:text-base text-[var(--color-primary)] hover:scale-105 border border-solid border-[var(--color-primary)] rounded-md py-1 px-2 md:px-3 transition-all duration-200 ease-linear">
-                Next &rarr;
-            </button>
+            <Link href={`${pathname}?page=${currentPage - 1}`}>
+                <button
+                    className={`text-sm md:text-base ${
+                        currentPage === 1 && "opacity-75 cursor-not-allowed"
+                    } text-[var(--color-primary)] hover:scale-105 border border-solid border-[var(--color-primary)] rounded-md py-1 px-2 md:px-3 transition-all duration-200 ease-linear`}
+                >
+                    &larr; Previous
+                </button>
+            </Link>
+
+            <p className="flex-grow w-fit text-center">
+                {currentPage} of {Math.ceil(totalPages / 3)}
+            </p>
+
+            <Link href={`${pathname}?page=${currentPage + 1}`}>
+                <button
+                    className={`text-sm md:text-base text-[var(--color-primary)] hover:scale-105 border border-solid border-[var(--color-primary)] rounded-md py-1 px-2 md:px-3 transition-all duration-200 ease-linear ${
+                        currentPage * 3 >= totalPages &&
+                        "opacity-75 cursor-not-allowed"
+                    }`}
+                >
+                    Next &rarr;
+                </button>
+            </Link>
         </section>
     )
 }

@@ -1,21 +1,56 @@
 import Heading from "@/components/Heading"
-import TextEditor from "@/components/TextEditor"
-import { useFormik } from "formik"
+import PostForm from "@/components/PostForm"
+import { formatPostPayload, formatTags } from "@/utils/format"
+import axios, { AxiosError, AxiosResponse } from "axios"
+import { toast } from "react-hot-toast"
+import { useRouter } from "next/router"
+
+interface PostResponse {
+    msg: string
+    slug: string
+}
 
 const NewPost = () => {
-    // Formik initial values
-    const initialValues = {
-        title: "",
-        desc: "",
-        tags: "",
-        content: "",
+    const router = useRouter()
+
+    async function createNewPost(values: PostRequestBody) {
+        try {
+            // Format payload
+            const { title, description, content, tags } =
+                formatPostPayload(values)
+
+            const res: AxiosResponse<PostResponse, PostRequestBody> =
+                await axios.post(
+                    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/posts`,
+                    {
+                        title,
+                        description,
+                        tags,
+                        content,
+                    },
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        withCredentials: true,
+                    }
+                )
+
+            if (res.status === 201) {
+                toast.success(res.data.msg)
+                router.push(`/blogs/${res.data.slug}`)
+            } else {
+                toast.error("Some error occured!")
+            }
+        } catch (error) {
+            console.log(error)
+            const errorResponseMsg: { msg: string } =
+                error instanceof AxiosError && error.response?.data
+            if (errorResponseMsg) {
+                toast.error(errorResponseMsg.msg)
+            }
+        }
     }
-    const formik = useFormik({
-        initialValues,
-        onSubmit: (values) => {
-            console.log(values)
-        },
-    })
 
     return (
         <section className="my-3 md:my-6 space-y-10 relative w-full">
@@ -25,52 +60,7 @@ const NewPost = () => {
             />
 
             {/* New post */}
-            <form
-                className="md:space-y-4 space-y-3"
-                onSubmit={formik.handleSubmit}
-            >
-                <div className="flex items-center md:gap-4 gap-3 justify-between flex-col md:flex-row">
-                    <input
-                        type="text"
-                        placeholder="Title"
-                        className="input-primary"
-                        name="title"
-                        value={formik.values.title}
-                        onChange={formik.handleChange}
-                    />
-                    <input
-                        type="text"
-                        placeholder="Tags (comma separated)"
-                        className="input-primary"
-                        name="tags"
-                        value={formik.values.tags}
-                        onChange={formik.handleChange}
-                    />
-                </div>
-
-                <textarea
-                    cols={30}
-                    rows={3}
-                    className="input-primary resize-none"
-                    placeholder="Description"
-                    name="desc"
-                    value={formik.values.desc}
-                    onChange={formik.handleChange}
-                />
-
-                <TextEditor
-                    editorHandler={(value) =>
-                        formik.setFieldValue("content", value)
-                    }
-                />
-
-                <button
-                    className={`w-fit float-right bg-[var(--color-secondary)] py-2 px-5 font-semibold md:text-lg rounded-lg`}
-                    type="submit"
-                >
-                    Save &rarr;
-                </button>
-            </form>
+            <PostForm btnText="Post" formHandler={createNewPost} />
         </section>
     )
 }

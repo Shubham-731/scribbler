@@ -1,12 +1,14 @@
-import React, { useEffect, useRef } from "react"
+import React, { useEffect } from "react"
 import { Editor } from "@tinymce/tinymce-react"
 import { useTheme } from "@/providers/ThemeProvider"
 import { useState } from "react"
 
 const TextEditor = ({
     editorHandler,
+    initialValue,
 }: {
     editorHandler: (value: string) => void
+    initialValue?: string
 }) => {
     // check small screen
     const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false)
@@ -19,7 +21,10 @@ const TextEditor = ({
     return (
         <Editor
             apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
-            initialValue="<h3><strong>Write your content here...</strong></h3>"
+            initialValue={
+                initialValue ||
+                "<h3><strong>Write your content here...</strong></h3>"
+            }
             onEditorChange={(newValue, editor) => editorHandler(newValue)}
             init={{
                 height: 400,

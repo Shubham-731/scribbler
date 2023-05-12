@@ -1,87 +1,120 @@
 import Link from "next/link"
 import { useAuth } from "@/providers/AuthProvider"
+import axios, { AxiosError, AxiosResponse } from "axios"
+import { toast } from "react-hot-toast"
 
-const BlogPreview = ({ editable }: { editable: boolean }) => {
+const BlogPreview = ({
+    editable,
+    content,
+    setRefreshKey,
+}: {
+    editable: boolean
+    content: PostDocumentType
+    setRefreshKey?: (newVal: number) => void
+}) => {
     const { user } = useAuth()
+
+    const handleDeletePost = async (slug: string) => {
+        if (!slug) {
+            toast.error("Invalid slug!")
+        }
+
+        const confirmed = confirm("Are you sure to delete this post?")
+        if (confirmed) {
+            try {
+                const response: AxiosResponse<{ msg: string }> =
+                    await axios.delete(
+                        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/posts/${slug}`,
+                        {
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            withCredentials: true,
+                        }
+                    )
+
+                if (response.status === 200) {
+                    toast.success("Post successfully deleted!")
+                    setRefreshKey && setRefreshKey(Math.random())
+                }
+            } catch (error) {
+                const errorResponseMsg: { msg: string } =
+                    error instanceof AxiosError && error.response?.data
+                if (errorResponseMsg) {
+                    toast.error(errorResponseMsg.msg)
+                }
+                console.log(error)
+            }
+        }
+    }
 
     return (
         <div className="flex flex-col md:flex-row gap-2 py-4 px-1">
-            <div className="min-w-[12rem] md:space-y-1">
+            <div className="min-w-[14rem] md:space-y-1">
                 <p className="text-black/60 dark:text-white/60 leading-5 md:leading-6">
                     <span className="text-black/75 dark:text-white/75 font-semibold">
                         Date:{" "}
                     </span>
-                    August 7, 2021
+                    {new Date(content.createdAt).toDateString()}
                 </p>
                 <p className="text-black/60 dark:text-white/60 leading-5 md:leading-6">
                     <span className="text-black/75 dark:text-white/75 font-semibold">
                         Author:{" "}
                     </span>
-                    Lorem, ipsum dolor.
+                    {content.authorName}
                 </p>
             </div>
             <div className="w-full space-y-2">
-                <Link href={"/blogs/new-feature-in-v1"}>
+                <Link href={`/blogs/${content.slug}`}>
                     <h2 className="text-lg md:text-xl dark:text-white/90 text-black/90 font-semibold cursor-pointer hover:text-black dark:hover:text-white">
-                        New features in v1
+                        {content.title}
                     </h2>
                 </Link>
                 <div className="flex flex-wrap gap-5">
-                    <Link href={`/tags/next-js`}>
-                        <button className="uppercase text-[var(--color-secondary)] hover:scale-105 transition-all duration-200 ease-linear">
-                            next-js
-                        </button>
-                    </Link>
-                    <Link href={`/tags/tailwind-css`}>
-                        <button className="uppercase text-[var(--color-secondary)] hover:scale-105 transition-all duration-200 ease-linear">
-                            tailwind-css
-                        </button>
-                    </Link>
-                    <Link href={`/tags/guide`}>
-                        <button className="uppercase text-[var(--color-secondary)] hover:scale-105 transition-all duration-200 ease-linear">
-                            guide
-                        </button>
-                    </Link>
+                    {typeof content.tags === "object" &&
+                        content.tags.map((tag) => (
+                            <Link href={`/tags/${tag}`} key={tag}>
+                                <button className="uppercase text-[var(--color-secondary)] hover:scale-105 transition-all duration-200 ease-linear">
+                                    {tag}
+                                </button>
+                            </Link>
+                        ))}
                 </div>
                 <p className="text-sm text-black/60 dark:text-white/60 md:text-[0.95rem] md:leading-[1.15rem] leading-4 ellipsis">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Explicabo a neque nemo consectetur eaque commodi quos sit
-                    vero, praesentium ea qui quia molestias. Veniam ipsum
-                    dolores delectus quas, sint rem! Magnam, ad?
+                    {content.description}
                 </p>
 
                 <div
                     className="flex items-center gap-2 md:gap-3"
                     style={{ marginTop: "1rem" }}
                 >
-                    {user && editable ? (
+                    <button>
+                        <Link
+                            href={`/blogs/${content.slug}`}
+                            className="text-[var(--color-primary)] hover:tracking-wide border border-solid border-[var(--color-primary)] rounded-md py-1 px-3 transition-all duration-200 ease-linear text-sm md:text-base"
+                        >
+                            Read more &rarr;
+                        </Link>
+                    </button>
+
+                    {user && editable && (
                         <>
                             <button>
                                 <Link
-                                    href={"/blogs/new-feature-in-v1"}
+                                    href={`/posts/update/${content.slug}`}
                                     className="text-[var(--color-secondary)] hover:tracking-wide border border-solid border-[var(--color-secondary)] rounded-md py-1 px-3 transition-all duration-200 ease-linear text-sm md:text-base"
                                 >
                                     Edit &rarr;
                                 </Link>
                             </button>
-                            <button>
-                                <Link
-                                    href={"/blogs/new-feature-in-v1"}
-                                    className="text-[var(--color-secondary)] hover:tracking-wide border border-solid border-[var(--color-secondary)] rounded-md py-1 px-3 transition-all duration-200 ease-linear text-sm md:text-base"
-                                >
-                                    Delete &rarr;
-                                </Link>
+
+                            <button
+                                className="text-[var(--color-secondary)] hover:tracking-wide border border-solid border-[var(--color-secondary)] rounded-md py-1 px-3 transition-all duration-200 ease-linear text-sm md:text-base"
+                                onClick={() => handleDeletePost(content.slug)}
+                            >
+                                Delete &rarr;
                             </button>
                         </>
-                    ) : (
-                        <button>
-                            <Link
-                                href={"/blogs/new-feature-in-v1"}
-                                className="text-[var(--color-primary)] hover:tracking-wide border border-solid border-[var(--color-primary)] rounded-md py-1 px-3 transition-all duration-200 ease-linear text-sm md:text-base"
-                            >
-                                Read more &rarr;
-                            </Link>
-                        </button>
                     )}
                 </div>
             </div>
