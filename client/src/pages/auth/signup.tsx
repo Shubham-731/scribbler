@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import { useFormik } from "formik"
 import { useAuth } from "@/providers/AuthProvider"
 import { useRouter } from "next/router"
+import Head from "next/head"
 
 const SignUp = () => {
     // Handle show password
@@ -16,7 +17,7 @@ const SignUp = () => {
     const router = useRouter()
 
     // Get formdata using formik
-    const initialValues: UserType = {
+    const initialValues: UserInputType = {
         fullName: "",
         email: "",
         password: "",
@@ -36,92 +37,98 @@ const SignUp = () => {
     }, [user])
 
     return (
-        <section>
-            <Heading
-                title="Sign Up"
-                desc="Join our community of bloggers today!"
-            />
+        <>
+            <Head>
+                <title>Signup - Scribbler</title>
+            </Head>
 
-            {/* Login form */}
-            <form
-                className="space-y-3 my-10 max-w-md w-full mx-auto relative"
-                onSubmit={formik.handleSubmit}
-            >
-                <input
-                    type="text"
-                    placeholder="Full Name"
-                    className="input-primary"
-                    value={formik.values.fullName}
-                    onChange={formik.handleChange}
-                    name="fullName"
-                    autoComplete="off"
+            <section>
+                <Heading
+                    title="Sign Up"
+                    desc="Join our community of bloggers today!"
                 />
-                <input
-                    type="email"
-                    placeholder="Email Address"
-                    className="input-primary"
-                    value={formik.values.email}
-                    onChange={formik.handleChange}
-                    name="email"
-                    autoComplete="off"
-                />
-                <div className="w-full relative">
+
+                {/* Login form */}
+                <form
+                    className="space-y-3 my-10 max-w-md w-full mx-auto relative"
+                    onSubmit={formik.handleSubmit}
+                >
                     <input
-                        type={showPassword ? "text" : "password"}
-                        placeholder="Password"
+                        type="text"
+                        placeholder="Full Name"
                         className="input-primary"
-                        value={formik.values.password}
+                        value={formik.values.fullName}
                         onChange={formik.handleChange}
-                        name="password"
+                        name="fullName"
                         autoComplete="off"
                     />
+                    <input
+                        type="email"
+                        placeholder="Email Address"
+                        className="input-primary"
+                        value={formik.values.email}
+                        onChange={formik.handleChange}
+                        name="email"
+                        autoComplete="off"
+                    />
+                    <div className="w-full relative">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Password"
+                            className="input-primary"
+                            value={formik.values.password}
+                            onChange={formik.handleChange}
+                            name="password"
+                            autoComplete="off"
+                        />
 
-                    <div className="absolute top-0.5 right-2">
-                        <button
-                            className="relative w-5 h-5"
-                            type="button"
-                            onClick={toggleShowPassword}
-                        >
-                            {showPassword ? (
-                                <Image
-                                    src={"/svgs/eye-slash.svg"}
-                                    alt="Hide password"
-                                    className="dark:invert"
-                                    fill={true}
-                                />
-                            ) : (
-                                <Image
-                                    src={"/svgs/eye.svg"}
-                                    alt="Show password"
-                                    className="dark:invert"
-                                    fill={true}
-                                />
-                            )}
-                        </button>
+                        <div className="absolute top-0.5 right-2">
+                            <button
+                                className="relative w-5 h-5"
+                                type="button"
+                                onClick={toggleShowPassword}
+                            >
+                                {showPassword ? (
+                                    <Image
+                                        src={"/svgs/eye-slash.svg"}
+                                        alt="Hide password"
+                                        className="dark:invert"
+                                        fill={true}
+                                    />
+                                ) : (
+                                    <Image
+                                        src={"/svgs/eye.svg"}
+                                        alt="Show password"
+                                        className="dark:invert"
+                                        fill={true}
+                                    />
+                                )}
+                            </button>
+                        </div>
                     </div>
-                </div>
 
-                <button>
-                    <Link
-                        href="/auth/login"
-                        className="text-sm hover:underline text-[var(--color-secondary)]"
+                    <button>
+                        <Link
+                            href="/auth/login"
+                            className="text-sm hover:underline text-[var(--color-secondary)]"
+                        >
+                            Already have an account?
+                        </Link>
+                    </button>
+
+                    <button
+                        className={`md:w-fit w-full float-right bg-[var(--color-primary)] text-white py-2 px-5 font-semibold rounded-lg ${
+                            formik.isSubmitting &&
+                            !formik.isValidating &&
+                            "pointer-events-none opacity-75"
+                        }`}
+                        type="submit"
                     >
-                        Already have an account?
-                    </Link>
-                </button>
-
-                <button
-                    className={`md:w-fit w-full float-right bg-[var(--color-primary)] text-white py-2 px-5 font-semibold rounded-lg ${
-                        formik.isSubmitting &&
-                        !formik.isValidating &&
-                        "pointer-events-none opacity-75"
-                    }`}
-                    type="submit"
-                >
-                    Sign up &rarr;
-                </button>
-            </form>
-        </section>
+                        Sign up &rarr;
+                    </button>
+                </form>
+            </section>
+        </>
     )
 }
 

@@ -4,6 +4,7 @@ import { formatPostPayload, formatTags } from "@/utils/format"
 import axios, { AxiosError, AxiosResponse } from "axios"
 import { toast } from "react-hot-toast"
 import { useRouter } from "next/router"
+import Head from "next/head"
 
 interface PostResponse {
     msg: string
@@ -53,15 +54,21 @@ const NewPost = () => {
     }
 
     return (
-        <section className="my-3 md:my-6 space-y-10 relative w-full">
-            <Heading
-                title="create new post"
-                desc="Create a New Post and Share Your Voice!"
-            />
+        <>
+            <Head>
+                <title>Create new Post - Scribbler</title>
+            </Head>
 
-            {/* New post */}
-            <PostForm btnText="Post" formHandler={createNewPost} />
-        </section>
+            <section className="my-3 md:my-6 space-y-10 relative w-full">
+                <Heading
+                    title="create new post"
+                    desc="Create a New Post and Share Your Voice!"
+                />
+
+                {/* New post */}
+                <PostForm btnText="Post" formHandler={createNewPost} />
+            </section>
+        </>
     )
 }
 

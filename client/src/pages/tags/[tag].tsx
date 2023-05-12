@@ -3,6 +3,7 @@ import Pagination from "@/components/Pagination"
 import SearchArticle from "@/components/SearchArticle"
 import axios from "axios"
 import { GetServerSideProps } from "next"
+import Head from "next/head"
 
 interface PageProps {
     blogs: PostDocumentType[]
@@ -13,30 +14,42 @@ interface PageProps {
 
 const ArticlesByTag = ({ blogs, currentPage, totalPages, tag }: PageProps) => {
     return (
-        <div className="py-5 space-y-4">
-            {/* Search article */}
-            <SearchArticle title={tag} />
+        <>
+            <Head>
+                <title>
+                    {tag.toUpperCase().replaceAll("-", " ")} - Scribbler
+                </title>
+            </Head>
 
-            {/* Blogs */}
-            <section className="divide-y dark:divide-white/50 divide-black/50 space-y-3">
-                {blogs.length ? (
-                    blogs.map((blog, i) => (
-                        <BlogPreview editable={false} content={blog} key={i} />
-                    ))
-                ) : (
-                    <p className="text-center text-[var(--color-secondary)]">
-                        Posts not found anymore!
-                    </p>
-                )}
-            </section>
+            <div className="py-5 space-y-4">
+                {/* Search article */}
+                <SearchArticle title={tag} />
 
-            {/* Pagination */}
-            <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                pathname={`/tags/${tag}`}
-            />
-        </div>
+                {/* Blogs */}
+                <section className="divide-y dark:divide-white/50 divide-black/50 space-y-3">
+                    {blogs.length ? (
+                        blogs.map((blog, i) => (
+                            <BlogPreview
+                                editable={false}
+                                content={blog}
+                                key={i}
+                            />
+                        ))
+                    ) : (
+                        <p className="text-center text-[var(--color-secondary)]">
+                            Posts not found anymore!
+                        </p>
+                    )}
+                </section>
+
+                {/* Pagination */}
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    pathname={`/tags/${tag}`}
+                />
+            </div>
+        </>
     )
 }
 

@@ -1,5 +1,7 @@
 import BlogContent from "@/components/BlogContent"
+import { tagsToString } from "@/utils/format"
 import axios from "axios"
+import Head from "next/head"
 import { toast } from "react-hot-toast"
 
 interface PageProps {
@@ -18,19 +20,33 @@ const BlogBySlug = ({ blog }: PageProps) => {
     }
 
     return (
-        <section className="py-5 space-y-4">
-            <div className="space-y-1 text-center pb-3 md:pb-5 border-b w-full border-b-black/50 dark:border-b-white/50">
-                <p className="dark:text-white/50 text-black/50 text-sm md:text-base">
-                    August 7, 2021
-                </p>
-                <h1 className="font-bold capitalize text-xl mb-1 md:text-2xl lg:text-3xl xl:text-4xl text-black/90 dark:text-white/90">
-                    {blog.title}
-                </h1>
-            </div>
+        <>
+            <Head>
+                <title>{blog.title} - Scribbler</title>
+                <meta name="description" content={blog.description} />
+                <meta
+                    name="keywords"
+                    content={tagsToString(
+                        typeof blog.tags === "object" ? blog.tags : []
+                    )}
+                />
+                <meta name="author" content={blog.authorName} />
+            </Head>
 
-            {/* Content */}
-            <BlogContent content={blog.content} />
-        </section>
+            <section className="py-5 space-y-4">
+                <div className="space-y-1 text-center pb-3 md:pb-5 border-b w-full border-b-black/50 dark:border-b-white/50">
+                    <p className="dark:text-white/50 text-black/50 text-sm md:text-base">
+                        August 7, 2021
+                    </p>
+                    <h1 className="font-bold capitalize text-xl mb-1 md:text-2xl lg:text-3xl xl:text-4xl text-black/90 dark:text-white/90">
+                        {blog.title}
+                    </h1>
+                </div>
+
+                {/* Content */}
+                <BlogContent content={blog.content} />
+            </section>
+        </>
     )
 }
 

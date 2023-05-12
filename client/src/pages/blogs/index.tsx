@@ -3,6 +3,7 @@ import Pagination from "@/components/Pagination"
 import SearchArticle from "@/components/SearchArticle"
 import axios from "axios"
 import { GetServerSideProps } from "next"
+import Head from "next/head"
 import { useRouter } from "next/router"
 
 interface PageProps {
@@ -15,30 +16,40 @@ const Blogs = ({ blogs, currentPage, totalPages }: PageProps) => {
     const pathname = useRouter().pathname
 
     return (
-        <div className="py-5 space-y-4">
-            {/* Search article */}
-            <SearchArticle title="all posts" />
+        <>
+            <Head>
+                <title>All Posts - Scribbler</title>
+            </Head>
 
-            {/* Blogs */}
-            <section className="divide-y dark:divide-white/50 divide-black/50 space-y-3">
-                {blogs.length ? (
-                    blogs.map((blog, i) => (
-                        <BlogPreview editable={false} content={blog} key={i} />
-                    ))
-                ) : (
-                    <p className="text-center text-[var(--color-secondary)]">
-                        No articles found!
-                    </p>
-                )}
-            </section>
+            <div className="py-5 space-y-4">
+                {/* Search article */}
+                <SearchArticle title="all posts" />
 
-            {/* Pagination */}
-            <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                pathname={pathname}
-            />
-        </div>
+                {/* Blogs */}
+                <section className="divide-y dark:divide-white/50 divide-black/50 space-y-3">
+                    {blogs.length ? (
+                        blogs.map((blog, i) => (
+                            <BlogPreview
+                                editable={false}
+                                content={blog}
+                                key={i}
+                            />
+                        ))
+                    ) : (
+                        <p className="text-center text-[var(--color-secondary)]">
+                            No articles found!
+                        </p>
+                    )}
+                </section>
+
+                {/* Pagination */}
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    pathname={pathname}
+                />
+            </div>
+        </>
     )
 }
 

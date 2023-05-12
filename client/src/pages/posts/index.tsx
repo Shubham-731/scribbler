@@ -7,6 +7,7 @@ import { useEffect, useState } from "react"
 import { toast } from "react-hot-toast"
 import { useRouter } from "next/router"
 import Pagination from "@/components/Pagination"
+import Head from "next/head"
 
 interface PageProps {
     posts: PostDocumentType[]
@@ -61,50 +62,56 @@ const MyPosts = () => {
     }, [pageNumber, refreshKey])
 
     return (
-        <section className="my-3 md:my-6 space-y-10 w-full">
-            <Heading title="Your posts">
-                <div className="text-sm md:text-base text-center w-full">
-                    <Link
-                        href="/posts/new"
-                        className="text-[var(--color-primary)] capitalize underline hover:no-underline font-bold"
-                    >
-                        Create new post
-                    </Link>
-                </div>
-            </Heading>
+        <>
+            <Head>
+                <title>Your Posts - Scribbler</title>
+            </Head>
 
-            {/* Replace user with posts */}
-            {user ? (
-                <>
-                    <section className="divide-y dark:divide-white/50 divide-black/50 space-y-3">
-                        {posts.length ? (
-                            posts.map((post, i) => (
-                                <BlogPreview
-                                    editable={true}
-                                    content={post}
-                                    key={i}
-                                    setRefreshKey={setRefreshKey}
-                                />
-                            ))
-                        ) : (
-                            <p className="text-center text-[var(--color-secondary)]">
-                                You haven't created any post yet!
-                            </p>
-                        )}
-                    </section>
+            <section className="my-3 md:my-6 space-y-10 w-full">
+                <Heading title="Your posts">
+                    <div className="text-sm md:text-base text-center w-full">
+                        <Link
+                            href="/posts/new"
+                            className="text-[var(--color-primary)] capitalize underline hover:no-underline font-bold"
+                        >
+                            Create new post
+                        </Link>
+                    </div>
+                </Heading>
 
-                    <Pagination
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        pathname={router.pathname}
-                    />
-                </>
-            ) : (
-                <p className="text-center text-[var(--color-secondary)]">
-                    Login to see your posts!
-                </p>
-            )}
-        </section>
+                {/* Replace user with posts */}
+                {user ? (
+                    <>
+                        <section className="divide-y dark:divide-white/50 divide-black/50 space-y-3">
+                            {posts.length ? (
+                                posts.map((post, i) => (
+                                    <BlogPreview
+                                        editable={true}
+                                        content={post}
+                                        key={i}
+                                        setRefreshKey={setRefreshKey}
+                                    />
+                                ))
+                            ) : (
+                                <p className="text-center text-[var(--color-secondary)]">
+                                    You haven't created any post yet!
+                                </p>
+                            )}
+                        </section>
+
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            pathname={router.pathname}
+                        />
+                    </>
+                ) : (
+                    <p className="text-center text-[var(--color-secondary)]">
+                        Login to see your posts!
+                    </p>
+                )}
+            </section>
+        </>
     )
 }
 

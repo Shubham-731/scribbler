@@ -4,6 +4,7 @@ import { useAuth } from "@/providers/AuthProvider"
 import { formatPostPayload } from "@/utils/format"
 import axios, { AxiosError, AxiosResponse } from "axios"
 import { GetServerSideProps } from "next"
+import Head from "next/head"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
 import { toast } from "react-hot-toast"
@@ -77,19 +78,25 @@ const EditPost = ({ blog, slug }: PageProps) => {
     }
 
     return (
-        <section className="my-3 md:my-6 space-y-10 relative w-full">
-            <Heading
-                title="update post"
-                desc="Update your post to reach out to more audience!"
-            />
+        <>
+            <Head>
+                <title>Update Post - Scribbler</title>
+            </Head>
 
-            {/* New post */}
-            <PostForm
-                btnText="Update"
-                formHandler={updatePost}
-                values={blog || undefined}
-            />
-        </section>
+            <section className="my-3 md:my-6 space-y-10 relative w-full">
+                <Heading
+                    title="update post"
+                    desc="Update your post to reach out to more audience!"
+                />
+
+                {/* New post */}
+                <PostForm
+                    btnText="Update"
+                    formHandler={updatePost}
+                    values={blog || undefined}
+                />
+            </section>
+        </>
     )
 }
 

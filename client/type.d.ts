@@ -1,7 +1,10 @@
-interface UserInputType {
-    fullName?: string
+interface UserType {
     email: string
     password: string
+}
+
+interface UserInputType extends UserType {
+    fullName?: string
 }
 
 interface AuthenticatedUserType {
