@@ -5,10 +5,57 @@ import { PostRequestBody } from "../types/PostTypes"
 import createDOMPurify from "dompurify"
 import { JSDOM } from "jsdom"
 import { PostType, PostDocumentType } from "../types/PostTypes"
+import User from "../models/User"
 
 interface PostResponse {
     msg: string
     slug?: string
+}
+
+const getPosts = async (req: Request, res: Response): Promise<void> => {
+    try {
+        // Check if authenticated
+        if (!req.currentUser) {
+            res.status(401).json({
+                msg: `Unauthorized request!`,
+            })
+
+            return
+        }
+
+        // Pagination props
+        const pageSize = 3
+        const page: number = parseInt(req.query.page?.toString() || "1")
+        const skip = (page - 1) * pageSize
+
+        // Get posts
+        const author = await User.findOne({ email: req.currentUser.email })
+        const totalPosts = await Post.countDocuments({
+            authorId: author?._id.toString(),
+        })
+        const posts: PostDocumentType[] = await Post.find({
+            authorId: author?._id.toString(),
+        })
+            .sort({
+                createdAt: -1,
+            })
+            .skip(skip)
+            .limit(pageSize)
+
+        // Send success response
+        res.status(200).json({
+            msg: "Posts found!",
+            posts,
+            currentPage: page,
+            totalPages: totalPosts,
+        })
+    } catch (error) {
+        console.log(error)
+        const errorMsg = error instanceof Error && error.message
+        res.status(500).json({
+            msg: errorMsg.toString(),
+        })
+    }
 }
 
 const createPost = async (
@@ -75,7 +122,10 @@ const createPost = async (
     }
 }
 
-const updatePost = async (req: Request, res: Response<PostResponse>) => {
+const updatePost = async (
+    req: Request,
+    res: Response<PostResponse>
+): Promise<void> => {
     try {
         // Check if user exists
         if (req.currentUser) {
@@ -177,4 +227,4 @@ const deletePost = async (
     }
 }
 
-export { createPost, updatePost, deletePost }
+export { createPost, updatePost, deletePost, getPosts }
