@@ -5,7 +5,6 @@ import { PostRequestBody } from "../types/PostTypes"
 import createDOMPurify from "dompurify"
 import { JSDOM } from "jsdom"
 import { PostType, PostDocumentType } from "../types/PostTypes"
-import User from "../models/User"
 
 interface PostResponse {
     msg: string
@@ -29,12 +28,11 @@ const getPosts = async (req: Request, res: Response): Promise<void> => {
         const skip = (page - 1) * pageSize
 
         // Get posts
-        const author = await User.findOne({ email: req.currentUser.email })
         const totalPosts = await Post.countDocuments({
-            authorId: author?._id.toString(),
+            authorId: req.currentUser._id.toString(),
         })
         const posts: PostDocumentType[] = await Post.find({
-            authorId: author?._id.toString(),
+            authorId: req.currentUser._id.toString(),
         })
             .sort({
                 createdAt: -1,
@@ -206,9 +204,17 @@ const deletePost = async (
         const slug: string = req.params.slug
 
         // Check if post exists
-        const oldPost = await Post.findOne({ slug })
+        const oldPost: PostDocumentType | null = await Post.findOne({ slug })
         if (!oldPost) {
             res.status(404).json({ msg: "Post not found!" })
+            return
+        }
+
+        // Check if authorId matches
+        if (oldPost.authorId !== req.currentUser._id.toString()) {
+            res.status(401).json({
+                msg: "You're not authorized to perform this operation!",
+            })
             return
         }
 
