@@ -101,7 +101,7 @@ const Login = () => {
                             href="/auth/signup"
                             className="text-sm hover:underline text-[var(--color-secondary)]"
                         >
-                            Don't have an account?
+                            Don&#39;t have an account?
                         </Link>
                     </div>
 

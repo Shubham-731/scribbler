@@ -94,7 +94,7 @@ const MyPosts = () => {
                                 ))
                             ) : (
                                 <p className="text-center text-[var(--color-secondary)]">
-                                    You haven't created any post yet!
+                                    You haven&#39;t created any post yet!
                                 </p>
                             )}
                         </section>
