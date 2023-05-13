@@ -66,6 +66,7 @@ const registerUser = async (
                 httpOnly: true,
                 secure: NODE_ENV === "PROD",
                 path: "/",
+                sameSite: "none",
             })
             .json({ msg: "Successfully registered!", user: sendUser(newUser) })
     } catch (error) {
@@ -112,6 +113,7 @@ const loginUser = async (
                 httpOnly: true,
                 secure: NODE_ENV === "PROD",
                 path: "/",
+                sameSite: "none",
             })
             .json({ msg: "Successfully logged in!", user: sendUser(user) })
     } catch (error) {
