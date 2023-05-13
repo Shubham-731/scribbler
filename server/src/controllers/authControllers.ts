@@ -65,6 +65,7 @@ const registerUser = async (
                 maxAge: 1 * 24 * 60 * 60 * 1000, // Set maxage to 1 day
                 httpOnly: true,
                 secure: NODE_ENV === "PROD",
+                path: "/",
             })
             .json({ msg: "Successfully registered!", user: sendUser(newUser) })
     } catch (error) {
@@ -110,6 +111,7 @@ const loginUser = async (
                 maxAge: 1 * 24 * 60 * 60 * 1000, // Set maxage to 1 day
                 httpOnly: true,
                 secure: NODE_ENV === "PROD",
+                path: "/",
             })
             .json({ msg: "Successfully logged in!", user: sendUser(user) })
     } catch (error) {
