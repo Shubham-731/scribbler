@@ -44,5 +44,8 @@
         "jsonwebtoken": "^9.0.0",
         "mongoose": "^7.0.5",
         "slugify": "^1.6.6"
+    },
+    "engines": {
+        "node": "16.x"
     }
 }
