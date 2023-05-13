@@ -59,7 +59,7 @@ const Blogs = ({ blogs, currentPage, totalPages }: PageProps) => {
                             />
                         ))
                     ) : (
-                        <p className="text-center text-[var(--color-secondary)]">
+                        <p className="text-center text-[var(--color-secondary)] my-10">
                             No articles found!
                         </p>
                     )}
