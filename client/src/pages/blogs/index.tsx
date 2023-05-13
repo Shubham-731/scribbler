@@ -5,6 +5,7 @@ import axios from "axios"
 import { GetServerSideProps } from "next"
 import Head from "next/head"
 import { useRouter } from "next/router"
+import { ChangeEvent, useState } from "react"
 
 interface PageProps {
     blogs: PostDocumentType[]
@@ -13,6 +14,24 @@ interface PageProps {
 }
 
 const Blogs = ({ blogs, currentPage, totalPages }: PageProps) => {
+    const [filteredBlogs, setFilteredBlogs] = useState(blogs)
+    const [searchQuery, setSearchQuery] = useState("")
+
+    const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+        const query = e.target.value.toLowerCase()
+
+        const filtered = blogs.filter(
+            (blog) =>
+                blog.title.toLowerCase().includes(query) ||
+                blog.description.toLowerCase().includes(query) ||
+                (typeof blog.tags === "object" &&
+                    blog.tags.some((tag) => tag.toLowerCase().includes(query)))
+        )
+
+        setSearchQuery(query)
+        setFilteredBlogs(filtered)
+    }
+
     const pathname = useRouter().pathname
 
     return (
@@ -23,12 +42,16 @@ const Blogs = ({ blogs, currentPage, totalPages }: PageProps) => {
 
             <div className="py-5 space-y-4">
                 {/* Search article */}
-                <SearchArticle title="all posts" />
+                <SearchArticle
+                    title="all posts"
+                    value={searchQuery}
+                    handleChange={handleSearch}
+                />
 
                 {/* Blogs */}
                 <section className="divide-y dark:divide-white/50 divide-black/50 space-y-3">
-                    {blogs.length ? (
-                        blogs.map((blog, i) => (
+                    {filteredBlogs.length ? (
+                        filteredBlogs.map((blog, i) => (
                             <BlogPreview
                                 editable={false}
                                 content={blog}

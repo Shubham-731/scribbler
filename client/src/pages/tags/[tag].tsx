@@ -4,6 +4,7 @@ import SearchArticle from "@/components/SearchArticle"
 import axios from "axios"
 import { GetServerSideProps } from "next"
 import Head from "next/head"
+import { ChangeEvent, useState } from "react"
 
 interface PageProps {
     blogs: PostDocumentType[]
@@ -13,6 +14,24 @@ interface PageProps {
 }
 
 const ArticlesByTag = ({ blogs, currentPage, totalPages, tag }: PageProps) => {
+    const [filteredBlogs, setFilteredBlogs] = useState(blogs)
+    const [searchQuery, setSearchQuery] = useState("")
+
+    const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+        const query = e.target.value.toLowerCase()
+
+        const filtered = blogs.filter(
+            (blog) =>
+                blog.title.toLowerCase().includes(query) ||
+                blog.description.toLowerCase().includes(query) ||
+                (typeof blog.tags === "object" &&
+                    blog.tags.some((tag) => tag.toLowerCase().includes(query)))
+        )
+
+        setSearchQuery(query)
+        setFilteredBlogs(filtered)
+    }
+
     return (
         <>
             <Head>
@@ -23,12 +42,16 @@ const ArticlesByTag = ({ blogs, currentPage, totalPages, tag }: PageProps) => {
 
             <div className="py-5 space-y-4">
                 {/* Search article */}
-                <SearchArticle title={tag} />
+                <SearchArticle
+                    title={tag}
+                    value={searchQuery}
+                    handleChange={handleSearch}
+                />
 
                 {/* Blogs */}
                 <section className="divide-y dark:divide-white/50 divide-black/50 space-y-3">
-                    {blogs.length ? (
-                        blogs.map((blog, i) => (
+                    {filteredBlogs.length ? (
+                        filteredBlogs.map((blog, i) => (
                             <BlogPreview
                                 editable={false}
                                 content={blog}
@@ -36,8 +59,8 @@ const ArticlesByTag = ({ blogs, currentPage, totalPages, tag }: PageProps) => {
                             />
                         ))
                     ) : (
-                        <p className="text-center text-[var(--color-secondary)]">
-                            Posts not found anymore!
+                        <p className="text-center my-10 text-[var(--color-secondary)]">
+                            No articles found!
                         </p>
                     )}
                 </section>
