@@ -132,7 +132,13 @@ const logoutUser = async (
 ) => {
     try {
         res.status(200)
-            .cookie("auth-token", "", { maxAge: 1 })
+            .cookie("auth-token", "", {
+                maxAge: 1,
+                httpOnly: true,
+                secure: true,
+                path: "/",
+                sameSite: "none",
+            })
             .json({ msg: "Logout success!" })
     } catch (error) {
         const errorMsg = error instanceof Error && error.message
