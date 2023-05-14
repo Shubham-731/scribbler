@@ -23,7 +23,6 @@ const EditPost = ({ blog, slug }: PageProps) => {
     // For authenticated user only
     const { user } = useAuth()
     const router = useRouter()
-    console.log(slug)
 
     useEffect(() => {
         if (!user) {

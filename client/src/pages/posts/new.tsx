@@ -5,6 +5,8 @@ import axios, { AxiosError, AxiosResponse } from "axios"
 import { toast } from "react-hot-toast"
 import { useRouter } from "next/router"
 import Head from "next/head"
+import { useAuth } from "@/providers/AuthProvider"
+import { useEffect } from "react"
 
 interface PostResponse {
     msg: string
@@ -13,6 +15,13 @@ interface PostResponse {
 
 const NewPost = () => {
     const router = useRouter()
+    const { user } = useAuth()
+
+    useEffect(() => {
+        if (!user) {
+            router.push("/")
+        }
+    }, [user])
 
     async function createNewPost(values: PostRequestBody) {
         try {
@@ -66,7 +75,7 @@ const NewPost = () => {
                 />
 
                 {/* New post */}
-                <PostForm btnText="Post" formHandler={createNewPost} />
+                <PostForm btnText="Publish" formHandler={createNewPost} />
             </section>
         </>
     )

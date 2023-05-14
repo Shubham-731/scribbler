@@ -1,31 +1,43 @@
 import React, { useEffect } from "react"
 import { Editor } from "@tinymce/tinymce-react"
 import { useTheme } from "@/providers/ThemeProvider"
-import { useState } from "react"
+import { useState, useRef } from "react"
 
 const TextEditor = ({
     editorHandler,
     initialValue,
+    handleSave,
+    saved,
 }: {
     editorHandler: (value: string) => void
     initialValue?: string
+    handleSave: () => void
+    saved: boolean
 }) => {
     // check small screen
     const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false)
+    const editorRef = useRef<any>(null)
+
     useEffect(() => {
         setIsSmallScreen(window.matchMedia("(max-width: 1023.5px)").matches)
     }, [])
 
     const { theme } = useTheme()
 
+    // Set editor content
+    useEffect(() => {
+        editorHandler(editorRef.current?.getContent())
+    }, [saved])
+
     return (
         <Editor
             apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
+            onInit={(evt, editor) => (editorRef.current = editor)}
             initialValue={
                 initialValue ||
                 "<h3><strong>Write your content here...</strong></h3>"
             }
-            onEditorChange={(newValue, editor) => editorHandler(newValue)}
+            onEditorChange={saved ? handleSave : () => {}}
             init={{
                 height: 400,
                 menubar: "file edit view insert format tools table help",
