@@ -9,6 +9,7 @@ import {
     SendUserType,
 } from "../types/UserTypes"
 import { NODE_ENV } from "../config/env"
+import { CLIENT_URL } from "../config/env"
 
 interface AuthenticatedResponse {
     msg: string | false
@@ -64,7 +65,7 @@ const registerUser = async (
             .cookie("auth-token", authToken, {
                 maxAge: 1 * 24 * 60 * 60 * 1000, // Set maxage to 1 day
                 httpOnly: true,
-                secure: NODE_ENV === "PROD",
+                secure: true,
                 path: "/",
                 sameSite: "none",
             })
@@ -111,7 +112,7 @@ const loginUser = async (
             .cookie("auth-token", authToken, {
                 maxAge: 1 * 24 * 60 * 60 * 1000, // Set maxage to 1 day
                 httpOnly: true,
-                secure: NODE_ENV === "PROD",
+                secure: true,
                 path: "/",
                 sameSite: "none",
             })
