@@ -8,8 +8,6 @@ import {
     UserDocument,
     SendUserType,
 } from "../types/UserTypes"
-import { NODE_ENV } from "../config/env"
-import { CLIENT_URL } from "../config/env"
 
 interface AuthenticatedResponse {
     msg: string | false
