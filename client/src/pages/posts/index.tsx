@@ -18,7 +18,7 @@ interface PageProps {
 const MyPosts = () => {
     const [posts, setPosts] = useState<PostDocumentType[]>([])
     const [currentPage, setCurrentPage] = useState(1)
-    const [totalPages, setTotalPages] = useState(0)
+    const [totalPages, setTotalPages] = useState(1)
     const [refreshKey, setRefreshKey] = useState(0)
 
     const { user } = useAuth()

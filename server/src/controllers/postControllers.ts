@@ -6,6 +6,7 @@ import createDOMPurify from "dompurify"
 import { JSDOM } from "jsdom"
 import { PostType, PostDocumentType } from "../types/PostTypes"
 import { formatPostData } from "../utils/format"
+import { PAGE_SIZE } from "../config/env"
 
 interface PostResponse {
     msg: string
@@ -24,7 +25,7 @@ const getPosts = async (req: Request, res: Response): Promise<void> => {
         }
 
         // Pagination props
-        const pageSize = 5
+        const pageSize = PAGE_SIZE
         const page: number = parseInt(req.query.page?.toString() || "1")
         const skip = (page - 1) * pageSize
 

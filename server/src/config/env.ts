@@ -9,9 +9,10 @@ const MONGO_URL: string =
 const JWT_SECRET: string = process.env.JWT_SECRET || ""
 const PORT: number | string = process.env.PORT || 5000
 const CLIENT_URL: string = process.env.CLIENT_URL || ""
+const PAGE_SIZE: number = parseInt(process.env.PAGE_SIZE || "5")
 
 if (!MONGO_URL || !JWT_SECRET || !PORT || !CLIENT_URL) {
     throw new Error("Missing environment variables")
 }
 
-export { MONGO_URL, JWT_SECRET, PORT, CLIENT_URL, NODE_ENV }
+export { MONGO_URL, JWT_SECRET, PORT, CLIENT_URL, NODE_ENV, PAGE_SIZE }

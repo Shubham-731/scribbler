@@ -4,7 +4,7 @@ import SearchArticle from "@/components/SearchArticle"
 import axios from "axios"
 import { GetServerSideProps } from "next"
 import Head from "next/head"
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useEffect, useState } from "react"
 
 interface PageProps {
     blogs: PostDocumentType[]
@@ -16,6 +16,11 @@ interface PageProps {
 const ArticlesByTag = ({ blogs, currentPage, totalPages, tag }: PageProps) => {
     const [filteredBlogs, setFilteredBlogs] = useState(blogs)
     const [searchQuery, setSearchQuery] = useState("")
+
+    // Rerender the page on currentPage change
+    useEffect(() => {
+        setFilteredBlogs(blogs)
+    }, [currentPage])
 
     const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
         const query = e.target.value.toLowerCase()
@@ -112,7 +117,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
         return {
             props: {
                 blogs: [],
-                totalPages: 0,
+                totalPages: 1,
                 currentPage: 1,
                 tag: tag?.toString() || "",
             },
