@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import Post from "../models/Post"
 import { PostDocumentType } from "../types/PostTypes"
+import { formatPostData } from "../utils/format"
 
 interface Tags {
     count: number
@@ -10,7 +11,7 @@ interface Tags {
 const getBlogsByTag = async (req: Request, res: Response): Promise<void> => {
     try {
         // Pagination props
-        const pageSize = 3
+        const pageSize = 5
         const page: number = parseInt(req.query.page?.toString() || "1")
         const skip = (page - 1) * pageSize
 
@@ -35,7 +36,7 @@ const getBlogsByTag = async (req: Request, res: Response): Promise<void> => {
         // Send success response
         res.status(200).json({
             msg: "Blogs found!",
-            blogs,
+            blogs: formatPostData(blogs),
             currentPage: page,
             totalPages: totalBlogs,
         })

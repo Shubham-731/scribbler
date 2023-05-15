@@ -1,11 +1,12 @@
 import { Request, Response } from "express"
 import Post from "../models/Post"
 import { PostDocumentType } from "../types/PostTypes"
+import { formatPostData } from "../utils/format"
 
 const getLatestBlogs = async (req: Request, res: Response): Promise<void> => {
     try {
         // Pagination props
-        const pageSize = 3
+        const pageSize = 5
         const page: number = parseInt(req.query.page?.toString() || "1")
         const skip = (page - 1) * pageSize
 
@@ -20,7 +21,7 @@ const getLatestBlogs = async (req: Request, res: Response): Promise<void> => {
 
         res.status(200).json({
             msg: "Blogs found!",
-            blogs,
+            blogs: formatPostData(blogs),
             currentPage: page,
             totalPages: totalBlogs,
         })

@@ -1,7 +1,7 @@
 interface PostRequestBody {
     title: string
     description: string
-    tags: String[]
+    tags: string[]
     content: string
 }
 
@@ -11,6 +11,9 @@ interface PostType extends PostRequestBody {
     authorId: string
 }
 
-interface PostDocumentType extends PostType, Document {}
+interface PostDocumentType extends PostType, Document {
+    createdAt: string
+    updatedAt: string
+}
 
 export { PostType, PostRequestBody, PostDocumentType }

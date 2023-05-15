@@ -5,6 +5,7 @@ import { PostRequestBody } from "../types/PostTypes"
 import createDOMPurify from "dompurify"
 import { JSDOM } from "jsdom"
 import { PostType, PostDocumentType } from "../types/PostTypes"
+import { formatPostData } from "../utils/format"
 
 interface PostResponse {
     msg: string
@@ -23,7 +24,7 @@ const getPosts = async (req: Request, res: Response): Promise<void> => {
         }
 
         // Pagination props
-        const pageSize = 3
+        const pageSize = 5
         const page: number = parseInt(req.query.page?.toString() || "1")
         const skip = (page - 1) * pageSize
 
@@ -43,7 +44,7 @@ const getPosts = async (req: Request, res: Response): Promise<void> => {
         // Send success response
         res.status(200).json({
             msg: "Posts found!",
-            posts,
+            posts: formatPostData(posts),
             currentPage: page,
             totalPages: totalPosts,
         })
