@@ -59,6 +59,7 @@ const PostForm = ({ formHandler, btnText, values }: ComponentProp) => {
                     value={formik.values.title}
                     onChange={formik.handleChange}
                     autoComplete="off"
+                    required
                 />
                 <input
                     type="text"
@@ -68,6 +69,7 @@ const PostForm = ({ formHandler, btnText, values }: ComponentProp) => {
                     value={formik.values.tags}
                     onChange={formik.handleChange}
                     autoComplete="off"
+                    required
                 />
             </div>
 
@@ -80,6 +82,7 @@ const PostForm = ({ formHandler, btnText, values }: ComponentProp) => {
                 value={formik.values.description}
                 onChange={formik.handleChange}
                 autoComplete="off"
+                required
             />
 
             <TextEditor
