@@ -23,8 +23,6 @@ const Blogs = ({ blogs, currentPage, totalPages }: PageProps) => {
         setFilteredBlogs(blogs)
     }, [currentPage])
 
-    console.log({ blogs, currentPage, totalPages })
-
     const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
         const query = e.target.value.toLowerCase()
 

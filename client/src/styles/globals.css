@@ -22,9 +22,9 @@
     --bg-dark: #1a1717;
 }
 
-body {
+/* body {
     overflow-x: hidden;
-}
+} */
 
 /* For WebKit Browsers */
 ::-webkit-scrollbar {

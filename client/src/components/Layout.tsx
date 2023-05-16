@@ -14,7 +14,7 @@ const Layout = ({ children }: { children: JSX.Element }) => {
                 tags="Blogging,Writing,Content creation,Online publishing,Social media,SEO,Marketing,Digital media,Entrepreneurship,Business,Technology,Web development,Design,Personal development,Productivity,Leadership,Education,Health,Travel,Food."
             />
             <div className="bg-[var(--bg-light)] dark:bg-[var(--bg-dark)] text-black/80 dark:text-white/80">
-                <div className="max-w-5xl w-full relative mx-auto flex flex-col gap-4 p-5 min-h-screen">
+                <div className="max-w-5xl w-full relative mx-auto flex flex-col gap-4 p-5 min-h-screen overflow-x-hidden">
                     <Header />
                     <main className={`${poppins.className} flex-1`}>
                         {children}
