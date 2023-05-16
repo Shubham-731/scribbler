@@ -50,7 +50,7 @@ const BlogPreview = ({
 
     return (
         <div className="flex flex-col md:flex-row gap-2 py-4 px-1">
-            <div className="min-w-[14rem] md:space-y-1">
+            <div className="min-w-[14rem] md:space-y-1 text-sm md:text-base">
                 <p className="text-black/60 dark:text-white/60 leading-5 md:leading-6">
                     <span className="text-black/75 dark:text-white/75 font-semibold">
                         Date:{" "}
@@ -64,9 +64,10 @@ const BlogPreview = ({
                     {content.authorName}
                 </p>
             </div>
+
             <div className="w-full space-y-2">
                 <Link href={`/blogs/${content.slug}`}>
-                    <h2 className="text-lg md:text-xl dark:text-white/90 text-black/90 font-semibold cursor-pointer hover:text-black dark:hover:text-white">
+                    <h2 className="text-lg md:text-xl leading-5 md:leading-7 dark:text-white/90 text-black/90 font-semibold cursor-pointer hover:text-black dark:hover:text-white">
                         {content.title}
                     </h2>
                 </Link>
@@ -91,9 +92,9 @@ const BlogPreview = ({
                     <button>
                         <Link
                             href={`/blogs/${content.slug}`}
-                            className="text-[var(--color-primary)] hover:tracking-wide border border-solid border-[var(--color-primary)] rounded-md py-1 px-3 transition-all duration-200 ease-linear text-sm md:text-base"
+                            className="text-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-white border border-solid border-[var(--color-primary)] rounded-md py-1 px-3 transition-all duration-200 ease-linear text-sm md:text-base"
                         >
-                            Read more &rarr;
+                            Read more
                         </Link>
                     </button>
 
@@ -102,17 +103,17 @@ const BlogPreview = ({
                             <button>
                                 <Link
                                     href={`/posts/update/${content.slug}`}
-                                    className="text-[var(--color-secondary)] hover:tracking-wide border border-solid border-[var(--color-secondary)] rounded-md py-1 px-3 transition-all duration-200 ease-linear text-sm md:text-base"
+                                    className="text-[var(--color-secondary)] hover:bg-[var(--color-secondary)] hover:text-white border border-solid border-[var(--color-secondary)] rounded-md py-1 px-3 transition-all duration-200 ease-linear text-sm md:text-base"
                                 >
-                                    Edit &rarr;
+                                    Edit
                                 </Link>
                             </button>
 
                             <button
-                                className="text-[var(--color-secondary)] hover:tracking-wide border border-solid border-[var(--color-secondary)] rounded-md py-1 px-3 transition-all duration-200 ease-linear text-sm md:text-base"
+                                className="text-[var(--color-secondary)] hover:bg-[var(--color-secondary)] hover:text-white border border-solid border-[var(--color-secondary)] rounded-md py-1 px-3 transition-all duration-200 ease-linear text-sm md:text-base"
                                 onClick={() => handleDeletePost(content.slug)}
                             >
-                                Delete &rarr;
+                                Delete
                             </button>
                         </>
                     )}
