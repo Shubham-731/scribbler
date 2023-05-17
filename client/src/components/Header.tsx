@@ -14,51 +14,46 @@ const Menu = ({
     const router = useRouter()
     const { user, logout } = useAuth()
 
-    const tabs: { title: string; href: string; border?: boolean }[] = [
+    const tabs: { title: string; href: string; visible: boolean }[] = [
         {
             title: "Home",
             href: "/",
+            visible: true,
         },
         {
             title: "Blogs",
             href: "/blogs",
+            visible: true,
         },
         {
             title: "Tags",
             href: "/tags",
+            visible: true,
         },
-        /* {
-            title: "About",
-            href: "/about",
-        }, */
         {
             title: "my posts",
             href: "/posts",
+            visible: Boolean(user),
         },
     ]
 
     return (
         <ul className="flex items-center flex-col md:flex-row gap-6 md:gap-4">
-            {tabs.map((tab) => (
-                <li
-                    key={tab.title}
-                    className={`text-2xl capitalize md:text-lg font-medium transition-all text-black/80 dark:text-white/80 hover:text-[var(--color-primary)] dark:hover:text-[var(--color-primary)] ${
-                        router.pathname === tab.href &&
-                        "text-[var(--color-primary)] dark:text-[var(--color-primary)]"
-                    }`}
-                    onClick={closeSidebarHandler}
-                >
-                    <Link
-                        href={tab.href}
-                        className={`${
-                            tab.border &&
-                            "border border-solid border-[var(--color-primary)] rounded-md py-2 px-4 hover:bg-[var(--color-primary)] dark:hover:text-white/80 hover:text-white/80"
-                        }`}
-                    >
-                        {tab.title}
-                    </Link>
-                </li>
-            ))}
+            {tabs.map(
+                (tab) =>
+                    tab.visible && (
+                        <li
+                            key={tab.title}
+                            className={`text-2xl capitalize md:text-lg font-medium transition-all text-black/80 dark:text-white/80 hover:text-[var(--color-primary)] dark:hover:text-[var(--color-primary)] ${
+                                router.pathname === tab.href &&
+                                "text-[var(--color-primary)] dark:text-[var(--color-primary)]"
+                            }`}
+                            onClick={closeSidebarHandler}
+                        >
+                            <Link href={tab.href}>{tab.title}</Link>
+                        </li>
+                    )
+            )}
 
             <li
                 className={`text-2xl capitalize md:text-lg font-medium transition-all hover:text-[var(--color-primary)] dark:hover:text-[var(--color-primary)] text-[var(--color-primary)] dark:text-[var(--color-primary)]`}
