@@ -39,13 +39,11 @@ export default function Home() {
                         <section className="divide-y dark:divide-white/50 divide-black/50 space-y-3">
                             {data?.blogs.length ? (
                                 data?.blogs.map((blog, i) => (
-                                    <>
-                                        <BlogPreview
-                                            editable={false}
-                                            content={blog}
-                                            key={blog.slug}
-                                        />
-                                    </>
+                                    <BlogPreview
+                                        editable={false}
+                                        content={blog}
+                                        key={blog.slug}
+                                    />
                                 ))
                             ) : (
                                 <p className="text-center text-[var(--color-primary)]">
