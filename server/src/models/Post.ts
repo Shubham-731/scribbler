@@ -38,7 +38,7 @@ const postSchema = new Schema<PostDocumentType>(
     { timestamps: true }
 )
 
-const Post =
+const Post: mongoose.Model<PostDocumentType> =
     mongoose.models.Post || mongoose.model<PostDocumentType>("Post", postSchema)
 
 export default Post
