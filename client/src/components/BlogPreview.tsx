@@ -49,7 +49,7 @@ const BlogPreview = ({
     }
 
     return (
-        <div className="flex flex-col md:flex-row gap-2 py-4 px-1">
+        <article className="flex flex-col md:flex-row gap-2 py-4 px-1">
             <div className="min-w-[14rem] md:space-y-1 text-sm md:text-base">
                 <p className="text-black/60 dark:text-white/60 leading-5 md:leading-6">
                     <span className="text-black/75 dark:text-white/75 font-semibold">
@@ -119,7 +119,7 @@ const BlogPreview = ({
                     )}
                 </div>
             </div>
-        </div>
+        </article>
     )
 }
 
